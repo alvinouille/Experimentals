@@ -146,11 +146,16 @@ void	drawRays2D(t_game *game)
 {
 	int r, mx, my, mp, dof;
 	double rx, ry, ra, xo, yo, nTan, aTan;
-	double disV, disH;
+	double disV, disH, disT;
 	double hx, hy, vx, vy;
-	ra = game->pa;
+	t_moh2f next;
+	ra = game->pa - (DR * 30);
+	if (ra < 0)
+		ra += 2 * PI;
+	else if (ra > 2 * PI)
+		ra -= 2 * PI;
 	r = 0;
-	while (r < 1)
+	while (r < 60)
 	{
 		//CHECK HORIZONTAL LINES
 		dof = 0;
@@ -236,22 +241,28 @@ void	drawRays2D(t_game *game)
 			dof += 1;
 		}
 	}
-	r++;
-	}
 	if (disV < disH)
 	{
 		rx = vx;
 		ry = vy;
+		disT = disV;
 	}
 	if (disH < disV)
 	{
 		rx = hx;
 		ry = hy;
+		disT = disH;
 	}
-	t_moh2f next;
 	next.x = rx;
 	next.y = ry;
 	bresenham(game->img, next, game->player_pos);
+	ra += DR;
+	if (ra < 0)
+		ra += 2 * PI;
+	else if (ra > 2 * PI)
+		ra -= 2 * PI;
+	r++;
+	}
 }
 
 int	ddisplay(t_game *game)
