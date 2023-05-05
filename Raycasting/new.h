@@ -49,9 +49,9 @@ typedef struct {
 
 typedef struct s_map
 {
-    int length;
-    int width;
-    int size;
+    int 	length;
+    int 	height;
+    int 	size;
 }   t_map;
 
 typedef struct s_game
@@ -61,6 +61,7 @@ typedef struct s_game
 	t_data		img;
 	t_map       map;
     double       pa;
+	char		**tab;
     t_moh2f     pd;
 	t_moh2f		player_pos;
 }	t_game;
@@ -68,5 +69,6 @@ typedef struct s_game
 
 void	bresenham(t_data img, t_moh2f curr, t_moh2f next, int color);
 void	img_pixel_put(t_data *img, int x, int y, int color);
+void	drawRays2D(t_game *game);
 
 #endif
