@@ -13,8 +13,8 @@
 # include <stdio.h>
 # include <stdlib.h>
 
-# define W_WIDTH	1024
-# define W_HEIGHT	512
+# define W_WIDTH	2000
+# define W_HEIGHT	1280
 
 # define ESC 65307
 # define W 119
@@ -27,6 +27,7 @@
 # define P2 PI/2
 # define P3 3*PI/2
 # define DR4 0.00436332
+# define SIZE 32
 
 typedef struct s_data
 {
@@ -70,5 +71,9 @@ typedef struct s_game
 void	bresenham(t_data img, t_moh2f curr, t_moh2f next, int color);
 void	img_pixel_put(t_data *img, int x, int y, int color);
 void	drawRays2D(t_game *game);
+
+
+char	*gnl(int fd);
+char	**ft_split(char const *s, char c);
 
 #endif

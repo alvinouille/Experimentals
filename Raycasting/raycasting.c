@@ -1,7 +1,5 @@
 #include "new.h"
 
-extern int tab;
-
 float	shorter_dist(double ax, double ay, double bx, double by)
 {
 	return (sqrt ((bx - ax) * (bx - ax) + (by - ay) * (by - ay)));
@@ -43,7 +41,7 @@ void	drawRays2D(t_game *game)
 	r = 0;
 	while (r < 240)
 	{
-		//CHECK HORIZONTAL LINES
+		// CHECK HORIZONTAL LINES
 		dof = 0;
 		disH = 1000000;
 		hx = game->player_pos.x;
@@ -51,34 +49,34 @@ void	drawRays2D(t_game *game)
 		aTan = -1/tan(ra); 
 		if (ra < PI)  //looking down
 		{
-			ry = (((int)game->player_pos.y / 64) *64) -0.0001;	
+			ry = (((int)game->player_pos.y / SIZE) *SIZE) -0.0001;	
 			rx = (game->player_pos.y - ry) * aTan + game->player_pos.x;
-			yo = -64;
+			yo = -SIZE;
 			xo = -yo * aTan;
 		}
 		if (ra > PI)  //looking up
 		{
-			ry = (((int)game->player_pos.y / 64) *64) + 64;
+			ry = (((int)game->player_pos.y / SIZE) *SIZE) + SIZE;
 			rx = (game->player_pos.y - ry) * aTan + game->player_pos.x;
-			yo = 64;
+			yo = SIZE;
 			xo = -yo * aTan;
 		}
 		if (ra < 0.1 || ra == PI) //looking horizontally
 		{
 			rx = game->player_pos.x;
 			ry = game->player_pos.y;
-			dof = 8;
+			dof = game->map.height;
 		}
-		while (dof < 8)
+		while (dof < game->map.height)
 		{
-			mx = (int)rx / 64;
-			my = (int)ry / 64;
-			if (mx >= 0 && my >= 0 && mx < game->map.height && my < game->map.length && game->tab[my][mx] == '1')
+			mx = (int)rx / SIZE;
+			my = (int)ry / SIZE;
+			if (mx >= 0 && my >= 0 && mx < game->map.length && my < game->map.height && game->tab[my][mx] == '1')
 			{
 				hx = rx;
 				hy = ry;
 				disH = shorter_dist(game->player_pos.x, game->player_pos.y, hx, hy);
-				dof = 8;
+				dof = game->map.height;
 			}
 			else
 			{
@@ -95,28 +93,28 @@ void	drawRays2D(t_game *game)
 	nTan = -tan(ra); 
 	if (ra < P2 || ra > P3)  //looking right
 	{
-		rx = (((int)game->player_pos.x / 64) *64) -0.0001;
+		rx = (((int)game->player_pos.x / SIZE) *SIZE) -0.0001;
 		ry = (game->player_pos.x - rx) * nTan + game->player_pos.y;
-		xo = -64;
+		xo = -SIZE;
 		yo = -xo * nTan;
 	}
 	if (ra > P2 && ra < P3)  //looking left
 	{
-		rx = (((int)game->player_pos.x / 64) *64) + 64;
+		rx = (((int)game->player_pos.x / SIZE) *SIZE) + SIZE;
 		ry = (game->player_pos.x - rx) * nTan + game->player_pos.y;
-		xo = 64;
+		xo = SIZE;
 		yo = -xo * nTan;
 	}
-	while (dof < 8)
+	while (dof < game->map.length)
 	{
-		mx = (int)rx / 64;
-		my = (int)ry / 64;
-		if (mx >= 0 && my >= 0 && mx < game->map.height && my < game->map.length && game->tab[my][mx] == '1')
+		mx = (int)rx / SIZE;
+		my = (int)ry / SIZE;
+		if (mx >= 0 && my >= 0 && mx < game->map.length && my < game->map.height && game->tab[my][mx] == '1')
 		{
 			vx = rx;
 			vy = ry;
 			disV = shorter_dist(game->player_pos.x, game->player_pos.y, vx, vy);
-			dof = 8;
+			dof = game->map.length;
 		}
 		else
 		{
@@ -125,14 +123,14 @@ void	drawRays2D(t_game *game)
 			dof += 1;
 		}
 	}
-	if (disV < disH)
+	if (disV <= disH)
 	{
 		rx = vx;
 		ry = vy;
 		disT = disV;
 		color = 0x00DB1702;
 	}
-	if (disH < disV)
+	else if (disH < disV)
 	{
 		rx = hx;
 		ry = hy;
@@ -144,18 +142,18 @@ void	drawRays2D(t_game *game)
 	bresenham(game->img, game->player_pos, next, 0x000000FF);
 	// DRAW 3D WALLS
 	ca = game->pa - ra;
-	// if (ca < 0)
-	// 	ca += 2 * PI;
-	// else if (ca > 2 * PI)
-	// 	ca -= 2 * PI;
+	if (ca < 0)
+		ca += 2 * PI;
+	else if (ca > 2 * PI)
+		ca -= 2 * PI;
 	disT = disT * cos(ca); // to fix fish eye
-	lineH = (game->map.size * 320) /disT; //line height
-	if (lineH > 320)
-		lineH = 320;
-	lineO = 160 - lineH / 2;   //line offset to be more central
-	depart.x = r * 2 + 530;
+	lineH = (SIZE * 520) /disT; //line height
+	if (lineH > 520)
+		lineH = 520;
+	lineO = 700 - lineH / 2;   //line offset to be more central
+	depart.x = r * 2 + 250;
 	depart.y = lineO;
-	fin.x = r * 2 + 530;
+	fin.x = r * 2 + 250;
 	fin.y = lineH + lineO;
 	simply_line(game, depart, fin, color);
 	r++;
