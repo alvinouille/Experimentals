@@ -135,7 +135,7 @@ void	simply_line(t_game *game, t_moh2f start, t_moh2f end, int color)
 
 	y = start.y;
 	x = start.x;
-	while (x < start.x +8)
+	while (x < start.x +4)
 	{
 		while (y <= end.y)
 		{
@@ -171,7 +171,7 @@ void	drawRays2D(t_game *game)
 	int color;
 	t_moh2f next, depart, fin;
 
-	ra = game->pa - (DR * 200);
+	ra = game->pa - (DR * 30);
 	if (ra < 0)
 		ra += 2 * PI;
 	else if (ra > 2 * PI)
@@ -281,19 +281,19 @@ void	drawRays2D(t_game *game)
 	next.y = ry;
 	bresenham(game->img, next, game->player_pos);
 	// DRAW 3D WALLS
-	// ca = game->pa - ra;
-	// if (ca < 0)
-	// 	ca += 2 * PI;
-	// else if (ca > 2 * PI)
-	// 	ca -= 2 * PI;
-	// disT = disT * cos(ca); // to fix fish eye
+	ca = game->pa - ra;
+	if (ca < 0)
+		ca += 2 * PI;
+	else if (ca > 2 * PI)
+		ca -= 2 * PI;
+	disT = disT * cos(ca); // to fix fish eye
 	lineH = (game->map.size * 320) /disT; //line height
 	if (lineH > 320)
 		lineH = 320;
 	lineO = 160 - lineH / 2;   //line offset to be more central
-	depart.x = r * 8 + 530;
+	depart.x = r * 4 + 530;
 	depart.y = lineO;
-	fin.x = r * 8 + 530;
+	fin.x = r * 4 + 530;
 	fin.y = lineH + lineO;
 	// drawCube(game, depart, 1, 0x0000FFFF);
 	// printf("here\n");
