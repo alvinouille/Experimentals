@@ -3,48 +3,85 @@
 int tab[] =
 {
     1, 1, 1, 1, 1, 1, 1, 1,
+    1, 0, 1, 0, 0, 0, 1, 1,
     1, 0, 1, 0, 0, 0, 0, 1,
-    1, 0, 1, 0, 0, 0, 0, 1,
-    1, 0, 1, 0, 0, 0, 0, 1,
+    1, 0, 1, 0, 1, 1, 0, 1,
     1, 0, 0, 0, 0, 0, 0, 1,
-    1, 0, 0, 0, 0, 0, 0, 1,
+    1, 0, 0, 0, 0, 1, 0, 1,
     1, 0, 0, 0, 0, 1, 0, 1,
     1, 1, 1, 1, 1, 1, 1, 1,
 };
 
+int	is_wall(t_game *game, t_moh2f pos)
+{
+	int	mp, mx, my;
+
+	mx = (int)pos.x / 64;
+	my = (int)pos.y / 64;
+	mp = my * game->map.width + mx;
+	if (tab[mp] == 1)
+		return (1);
+	else
+		return (0);
+}
 
 int	deal_key(int key_symbole, t_game *game)
 {
+	t_moh2f next_pos;
+
+	next_pos = game->player_pos;
 	if (key_symbole == XK_Escape)
 	{
 		mlx_loop_end(game->mlx);
 		exit(0);
 	}
 	if (key_symbole == W)
-		game->player_pos.y -= 5;
+	{
+		next_pos.y -= game->pd.y; next_pos.x -= game->pd.x;
+		if (is_wall(game, next_pos))
+			return (0);
+		else
+			game->player_pos = next_pos;
+	}
 	if (key_symbole == S)
-		game->player_pos.y += 5;
+	{
+		next_pos.y += game->pd.y; next_pos.x += game->pd.x;
+		if (is_wall(game, next_pos))
+			return (0);
+		else
+			game->player_pos = next_pos;
+	}
 	if (key_symbole == A)
-		game->player_pos.x -= 5;
+	{
+		next_pos.x -= game->pd.y; next_pos.y += game->pd.x;
+		if (is_wall(game, next_pos))
+			return (0);
+		else
+			game->player_pos = next_pos;
+	}
 	if (key_symbole == D)
-		game->player_pos.x += 5;
+	{
+		next_pos.x += game->pd.y; next_pos.y -= game->pd.x;
+		if (is_wall(game, next_pos))
+			return (0);
+		else
+			game->player_pos = next_pos;
+	}
 	if (key_symbole == LEFT)
 	{
 		game->pa -= 0.1;
 		if (game->pa < 0)
 			game->pa += (2 * PI);
-		game->pd.x = (cos(game->pa));
-		game->pd.y = (sin(game->pa));
-		// printf("pa = %f, joueur.x : %f y : %f\n", game->pa, game->player_pos.x, game->player_pos.y);
+		game->pd.x = (cos(game->pa)) * 5;
+		game->pd.y = (sin(game->pa)) * 5;
 	}
 	if (key_symbole == RIGHT)
 	{
 		game->pa += 0.1;
 		if (game->pa >= (2 * PI))
 			game->pa -= 2 * PI;
-		game->pd.x = cos(game->pa);
-		game->pd.y = sin(game->pa);
-		// printf("pa = %f, joueur.x : %f y : %f\n", game->pa, game->player_pos.x, game->player_pos.y);
+		game->pd.x = cos(game->pa) * 5;
+		game->pd.y = sin(game->pa) * 5;
 	}
 	return (0);
 }
@@ -131,29 +168,27 @@ void	drawWall(t_game *game)
 void	simply_line(t_game *game, t_moh2f start, t_moh2f end, int color)
 {
 	int y;
-	int x;
 
 	y = start.y;
-	x = start.x;
-	while (x < start.x +4)
+	while (start.x <= end.x + 1)
 	{
 		while (y <= end.y)
 		{
-			img_pixel_put((&game->img), x, y, color);
+			img_pixel_put((&game->img), start.x, y, color);
 			y++;
 		}
 		y = start.y;
-		x++;
+		start.x++;
 	}
 }
+
 void	drawLine(t_game *game)
 {
 	t_moh2f next;
 
-	next.x = game->player_pos.x + game->pd.x *10;
-	next.y = game->player_pos.y + game->pd.y *10;
-	// printf("x : %f, y = %f\n", next.x, next.y);
-	bresenham(game->img, next, game->player_pos);
+	next.x = game->player_pos.x - (game->pd.x * 2);
+	next.y = game->player_pos.y - (game->pd.y * 2);
+	bresenham(game->img, game->player_pos, next, 0X00FFFF00);
 }
 
 float	shorter_dist(double ax, double ay, double bx, double by)
@@ -171,13 +206,13 @@ void	drawRays2D(t_game *game)
 	int color;
 	t_moh2f next, depart, fin;
 
-	ra = game->pa - (DR * 30);
+	ra = game->pa - (DR4 * 120);
 	if (ra < 0)
 		ra += 2 * PI;
 	else if (ra > 2 * PI)
 		ra -= 2 * PI;
 	r = 0;
-	while (r < 60)
+	while (r < 240)
 	{
 		//CHECK HORIZONTAL LINES
 		dof = 0;
@@ -187,7 +222,7 @@ void	drawRays2D(t_game *game)
 		aTan = -1/tan(ra); 
 		if (ra < PI)  //looking down
 		{
-			ry = (((int)game->player_pos.y / 64) *64) -0.0001;
+			ry = (((int)game->player_pos.y / 64) *64) -0.0001;	
 			rx = (game->player_pos.y - ry) * aTan + game->player_pos.x;
 			yo = -64;
 			xo = -yo * aTan;
@@ -279,31 +314,29 @@ void	drawRays2D(t_game *game)
 	}
 	next.x = rx;
 	next.y = ry;
-	bresenham(game->img, next, game->player_pos);
+	bresenham(game->img, game->player_pos, next, 0x000000FF);
 	// DRAW 3D WALLS
 	ca = game->pa - ra;
-	if (ca < 0)
-		ca += 2 * PI;
-	else if (ca > 2 * PI)
-		ca -= 2 * PI;
+	// if (ca < 0)
+	// 	ca += 2 * PI;
+	// else if (ca > 2 * PI)
+	// 	ca -= 2 * PI;
 	disT = disT * cos(ca); // to fix fish eye
 	lineH = (game->map.size * 320) /disT; //line height
 	if (lineH > 320)
 		lineH = 320;
 	lineO = 160 - lineH / 2;   //line offset to be more central
-	depart.x = r * 4 + 530;
+	depart.x = r * 2 + 530;
 	depart.y = lineO;
-	fin.x = r * 4 + 530;
+	fin.x = r * 2 + 530;
 	fin.y = lineH + lineO;
-	// drawCube(game, depart, 1, 0x0000FFFF);
-	// printf("here\n");
 	simply_line(game, depart, fin, color);
-	ra += DR;
+	r++;
+	ra += DR4;
 	if (ra < 0)
 		ra += 2 * PI;
 	else if (ra > 2 * PI)
 		ra -= 2 * PI;
-	r++;
 	}
 }
 
@@ -312,8 +345,8 @@ int	ddisplay(t_game *game)
 	grey_screen(game);
 	drawWall(game);
 	drawPlayer(game);
-	// drawLine(game);
 	drawRays2D(game);
+	drawLine(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
 	return (0);
 }
@@ -321,7 +354,6 @@ int	ddisplay(t_game *game)
 void	mlx(t_game game)
 {
 	game.mlx = mlx_init();
-	printf("%f\n", cos(1));
 	game.win = mlx_new_window(game.mlx, W_WIDTH, W_HEIGHT, "Cub3D");
 	game.img.img = mlx_new_image(game.mlx, W_WIDTH, W_HEIGHT);
 	game.img.addr = mlx_get_data_addr(game.img.img, &(game.img.bits_per_pixel),

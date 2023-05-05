@@ -26,7 +26,7 @@
 # define PI 3.14159265
 # define P2 PI/2
 # define P3 3*PI/2
-# define DR 0.0174533
+# define DR4 0.00436332
 
 typedef struct s_data
 {
@@ -66,7 +66,7 @@ typedef struct s_game
 }	t_game;
 
 
-void	bresenham(t_data img, t_moh2f curr, t_moh2f next);
+void	bresenham(t_data img, t_moh2f curr, t_moh2f next, int color);
 void	img_pixel_put(t_data *img, int x, int y, int color);
 
 #endif

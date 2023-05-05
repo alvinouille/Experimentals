@@ -12,7 +12,7 @@
 
 #include "new.h"
 
-void	first(t_data img, t_moh2f curr, t_moh2f next)
+void	first(t_data img, t_moh2f curr, t_moh2f next, int color)
 {
 	int		dy;
 	int		dx;
@@ -25,10 +25,11 @@ void	first(t_data img, t_moh2f curr, t_moh2f next)
 	e = next.x - curr.x;
 	dx = 2 * e;
 	dy = 2 * (next.y - curr.y);
+	// printf("1\n");
 	while (1)
 	{
 		if (x < W_HEIGHT && x > 0 && y < W_WIDTH && y > 0)
-			img_pixel_put(&img, x, y, 0x000000FF);
+			img_pixel_put(&img, x, y, color);
 		if (x >= next.x)
 			break ;
 		x++;
@@ -41,7 +42,7 @@ void	first(t_data img, t_moh2f curr, t_moh2f next)
 	}
 }
 
-void	second(t_data img, t_moh2f curr, t_moh2f next)
+void	second(t_data img, t_moh2f curr, t_moh2f next, int color)
 {
 	int		dy;
 	int		dx;
@@ -54,10 +55,11 @@ void	second(t_data img, t_moh2f curr, t_moh2f next)
 	e = next.y - curr.y;
 	dy = 2 * e;
 	dx = 2 * (next.x - curr.x);
+	// printf("2\n");
 	while (1)
 	{
 		if (x < W_HEIGHT && x > 0 && y < W_WIDTH && y > 0)
-			img_pixel_put(&img, x, y, 0x000000FF);
+			img_pixel_put(&img, x, y, color);
 		if (y >= next.y)
 			break ;
 		y++;
@@ -70,7 +72,7 @@ void	second(t_data img, t_moh2f curr, t_moh2f next)
 	}
 }
 
-void	vertical(t_data img, t_moh2f curr, t_moh2f next)
+void	vertical(t_data img, t_moh2f curr, t_moh2f next, int color)
 {
 	int		x;
 	int		y;
@@ -82,7 +84,7 @@ void	vertical(t_data img, t_moh2f curr, t_moh2f next)
 		while (y <= next.y)
 		{
 			if (x < W_HEIGHT && x > 0 && y < W_WIDTH && y > 0)
-				img_pixel_put(&img, x, y, 0x000000FF);
+				img_pixel_put(&img, x, y, color);
 			y++;
 		}
 	}
@@ -91,13 +93,13 @@ void	vertical(t_data img, t_moh2f curr, t_moh2f next)
 		while (y >= next.y)
 		{
 			if (x < W_HEIGHT && x > 0 && y < W_WIDTH && y > 0)
-				img_pixel_put(&img, x, y, 0x000000FF);
+				img_pixel_put(&img, x, y, color);
 			y--;
 		}
 	}
 }
 
-void	fifth(t_data img, t_moh2f curr, t_moh2f next)
+void	fifth(t_data img, t_moh2f curr, t_moh2f next, int color)
 {
 	int		dy;
 	int		dx;
@@ -110,11 +112,12 @@ void	fifth(t_data img, t_moh2f curr, t_moh2f next)
 	e = next.y - curr.y;
 	dy = 2 * e;
 	dx = 2 * (next.x - curr.x);
+	// printf("5\n");
 	while (1)
 	{
 		if (x < W_HEIGHT && x > 0 && y < W_WIDTH && y > 0)
-			img_pixel_put(&img, x, y, 0x000000FF);
-		if (x == next.x)
+			img_pixel_put(&img, x, y, color);
+		if (x <= next.x)
 			break ;
 		x--;
 		e -= dy;
@@ -126,7 +129,7 @@ void	fifth(t_data img, t_moh2f curr, t_moh2f next)
 	}
 }
 
-void	sixth(t_data img, t_moh2f curr, t_moh2f next)
+void	sixth(t_data img, t_moh2f curr, t_moh2f next, int color)
 {
 	int		dy;
 	int		dx;
@@ -139,11 +142,12 @@ void	sixth(t_data img, t_moh2f curr, t_moh2f next)
 	e = next.y - curr.y;
 	dy = 2 * e;
 	dx = 2 * (next.x - curr.x);
+	// printf("6\n");
 	while (1)
 	{
 		if (x < W_HEIGHT && x > 0 && y < W_WIDTH && y > 0)
-			img_pixel_put(&img, x, y, 0x000000FF);
-		if (y == next.y)
+			img_pixel_put(&img, x, y, color);
+		if (y <= next.y)
 			break ;
 		y--;
 		e -= dx;
@@ -156,7 +160,7 @@ void	sixth(t_data img, t_moh2f curr, t_moh2f next)
 }
 
 
-void	third(t_data img, t_moh2f curr, t_moh2f next)
+void	third(t_data img, t_moh2f curr, t_moh2f next, int color)
 {
 	int		dy;
 	int		dx;
@@ -169,11 +173,12 @@ void	third(t_data img, t_moh2f curr, t_moh2f next)
 	e = next.y - curr.y;
 	dy = 2 * e;
 	dx = 2 * (next.x - curr.x);
+	// printf("3\n");
 	while (1)
 	{
 		if (x < W_HEIGHT && x > 0 && y < W_WIDTH && y > 0)
-			img_pixel_put(&img, x, y, 0x000000FF);
-		if (y == next.y)
+			img_pixel_put(&img, x, y, color);
+		if (y >= next.y)
 			break ;
 		y++;
 		e += dx;
@@ -185,7 +190,7 @@ void	third(t_data img, t_moh2f curr, t_moh2f next)
 	}
 }
 
-void	fourth(t_data img, t_moh2f curr, t_moh2f next)
+void	fourth(t_data img, t_moh2f curr, t_moh2f next, int color)
 {
 	int		dy;
 	int		dx;
@@ -198,11 +203,12 @@ void	fourth(t_data img, t_moh2f curr, t_moh2f next)
 	e = next.x - curr.x;
 	dx = 2 * e;
 	dy = 2 * (next.y - curr.y);
+	// printf("4\n");
 	while (1)
 	{
 		if (x < W_HEIGHT && x > 0 && y < W_WIDTH && y > 0)
-			img_pixel_put(&img, x, y, 0x000000FF);
-		if (x == next.x)
+			img_pixel_put(&img, x, y, color);
+		if (x <= next.x)
 			break ;
 		x--;
 		e += dy;
@@ -214,7 +220,7 @@ void	fourth(t_data img, t_moh2f curr, t_moh2f next)
 	}
 }
 
-void	eight(t_data img, t_moh2f curr, t_moh2f next)
+void	eight(t_data img, t_moh2f curr, t_moh2f next, int color)
 {
 	int		dy;
 	int		dx;
@@ -227,11 +233,12 @@ void	eight(t_data img, t_moh2f curr, t_moh2f next)
 	e = next.x - curr.x;
 	dx = 2 * e;
 	dy = 2 * (next.y - curr.y);
+	// printf("8\n");
 	while (1)
 	{
 		if (x < W_HEIGHT && x > 0 && y < W_WIDTH && y > 0)
-			img_pixel_put(&img, x, y, 0x000000FF);
-		if (x == next.x)
+			img_pixel_put(&img, x, y, color);
+		if (x >= next.x)
 			break ;
 		x++;
 		e += dy;
@@ -243,7 +250,7 @@ void	eight(t_data img, t_moh2f curr, t_moh2f next)
 	}
 }
 
-void	seventh(t_data img, t_moh2f curr, t_moh2f next)
+void	seventh(t_data img, t_moh2f curr, t_moh2f next, int color)
 {
 	int		dy;
 	int		dx;
@@ -256,11 +263,12 @@ void	seventh(t_data img, t_moh2f curr, t_moh2f next)
 	e = next.y - curr.y;
 	dy = 2 * e;
 	dx = 2 * (next.x - curr.x);
+	// printf("7\n");
 	while (1)
 	{
 		if (x < W_HEIGHT && x > 0 && y < W_WIDTH && y > 0)
-			img_pixel_put(&img, x, y, 0x000000FF);
-		if (y == next.y)
+			img_pixel_put(&img, x, y, color);
+		if (y <= next.y)
 			break ;
 		y--;
 		e += dx;
@@ -273,7 +281,7 @@ void	seventh(t_data img, t_moh2f curr, t_moh2f next)
 }
 
 
-static void	going_up(t_data img, t_moh2f curr, t_moh2f next, float pente)
+static void	going_up(t_data img, t_moh2f curr, t_moh2f next, float pente, int color)
 {
 	int	x;
 
@@ -281,22 +289,22 @@ static void	going_up(t_data img, t_moh2f curr, t_moh2f next, float pente)
 	if (x < next.x)
 	{
 		if (pente >= 1)
-			second(img, curr, next);
+			second(img, curr, next, color);
 		else
-			first(img, curr, next);
+			first(img, curr, next, color);
 	}
 	else if (x == next.x)
-		vertical(img, curr, next);
+		vertical(img, curr, next, color);
 	else
 	{
 		if (pente < 1)
-			fifth(img, curr, next);
+			fifth(img, curr, next, color);
 		else
-			sixth(img, curr, next);
+			sixth(img, curr, next, color);
 	}
 }
 
-static void	going_down(t_data img, t_moh2f curr, t_moh2f next, float pente)
+static void	going_down(t_data img, t_moh2f curr, t_moh2f next, float pente, int color)
 {
 	int	x;
 
@@ -304,20 +312,20 @@ static void	going_down(t_data img, t_moh2f curr, t_moh2f next, float pente)
 	if (x < next.x)
 	{
 		if (pente >= -1)
-			eight(img, curr, next);
+			eight(img, curr, next, color);
 		else
-			seventh(img, curr, next);
+			seventh(img, curr, next, color);
 	}
 	else
 	{
 		if (pente < -1)
-			third(img, curr, next);
+			third(img, curr, next, color);
 		else
-			fourth(img, curr, next);
+			fourth(img, curr, next, color);
 	}
 }
 
-void	bresenham(t_data img, t_moh2f curr, t_moh2f next)
+void	bresenham(t_data img, t_moh2f curr, t_moh2f next, int color)
 {
 	int		dy;
 	int		dx;
@@ -334,7 +342,7 @@ void	bresenham(t_data img, t_moh2f curr, t_moh2f next)
 			pente = -pente;
 	}
 	if (pente >= 0)
-		going_up(img, curr, next, pente);
+		going_up(img, curr, next, pente, color);
 	else
-		going_down(img, curr, next, pente);
+		going_down(img, curr, next, pente, color);
 }
