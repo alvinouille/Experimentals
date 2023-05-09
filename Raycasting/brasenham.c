@@ -6,7 +6,7 @@
 /*   By: alvina <alvina@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 19:38:10 by alvina            #+#    #+#             */
-/*   Updated: 2023/05/04 19:44:07 by alvina           ###   ########.fr       */
+/*   Updated: 2023/05/09 14:17:59 by alvina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	first(t_data img, t_moh2f curr, t_moh2f next, int color)
 	// printf("1\n");
 	while (1)
 	{
-		if (x < W_HEIGHT && x > 0 && y < W_WIDTH && y > 0)
+		if (x < W_WIDTH && x > 0 && y < W_HEIGHT && y > 0)
 			img_pixel_put(&img, x, y, color);
 		if (x >= next.x)
 			break ;
@@ -58,7 +58,7 @@ void	second(t_data img, t_moh2f curr, t_moh2f next, int color)
 	// printf("2\n");
 	while (1)
 	{
-		if (x < W_HEIGHT && x > 0 && y < W_WIDTH && y > 0)
+		if (x < W_WIDTH && x > 0 && y < W_HEIGHT && y > 0)
 			img_pixel_put(&img, x, y, color);
 		if (y >= next.y)
 			break ;
@@ -83,7 +83,7 @@ void	vertical(t_data img, t_moh2f curr, t_moh2f next, int color)
 	{
 		while (y <= next.y)
 		{
-			if (x < W_HEIGHT && x > 0 && y < W_WIDTH && y > 0)
+			if (x < W_WIDTH && x > 0 && y < W_HEIGHT && y > 0)
 				img_pixel_put(&img, x, y, color);
 			y++;
 		}
@@ -92,7 +92,7 @@ void	vertical(t_data img, t_moh2f curr, t_moh2f next, int color)
 	{
 		while (y >= next.y)
 		{
-			if (x < W_HEIGHT && x > 0 && y < W_WIDTH && y > 0)
+			if (x < W_WIDTH && x > 0 && y < W_HEIGHT && y > 0)
 				img_pixel_put(&img, x, y, color);
 			y--;
 		}
@@ -115,7 +115,7 @@ void	fifth(t_data img, t_moh2f curr, t_moh2f next, int color)
 	// printf("5\n");
 	while (1)
 	{
-		if (x < W_HEIGHT && x > 0 && y < W_WIDTH && y > 0)
+		if (x < W_WIDTH && x > 0 && y < W_HEIGHT && y > 0)
 			img_pixel_put(&img, x, y, color);
 		if (x <= next.x)
 			break ;
@@ -145,7 +145,7 @@ void	sixth(t_data img, t_moh2f curr, t_moh2f next, int color)
 	// printf("6\n");
 	while (1)
 	{
-		if (x < W_HEIGHT && x > 0 && y < W_WIDTH && y > 0)
+		if (x < W_WIDTH && x > 0 && y < W_HEIGHT && y > 0)
 			img_pixel_put(&img, x, y, color);
 		if (y <= next.y)
 			break ;
@@ -176,7 +176,7 @@ void	third(t_data img, t_moh2f curr, t_moh2f next, int color)
 	// printf("3\n");
 	while (1)
 	{
-		if (x < W_HEIGHT && x > 0 && y < W_WIDTH && y > 0)
+		if (x < W_WIDTH && x > 0 && y < W_HEIGHT && y > 0)
 			img_pixel_put(&img, x, y, color);
 		if (y >= next.y)
 			break ;
@@ -206,7 +206,7 @@ void	fourth(t_data img, t_moh2f curr, t_moh2f next, int color)
 	// printf("4\n");
 	while (1)
 	{
-		if (x < W_HEIGHT && x > 0 && y < W_WIDTH && y > 0)
+		if (x < W_WIDTH && x > 0 && y < W_HEIGHT && y > 0)
 			img_pixel_put(&img, x, y, color);
 		if (x <= next.x)
 			break ;
@@ -236,7 +236,7 @@ void	eight(t_data img, t_moh2f curr, t_moh2f next, int color)
 	// printf("8\n");
 	while (1)
 	{
-		if (x < W_HEIGHT && x > 0 && y < W_WIDTH && y > 0)
+		if (x < W_WIDTH && x > 0 && y < W_HEIGHT && y > 0)
 			img_pixel_put(&img, x, y, color);
 		if (x >= next.x)
 			break ;
@@ -266,7 +266,7 @@ void	seventh(t_data img, t_moh2f curr, t_moh2f next, int color)
 	// printf("7\n");
 	while (1)
 	{
-		if (x < W_HEIGHT && x > 0 && y < W_WIDTH && y > 0)
+		if (x < W_WIDTH && x > 0 && y < W_HEIGHT && y > 0)
 			img_pixel_put(&img, x, y, color);
 		if (y <= next.y)
 			break ;

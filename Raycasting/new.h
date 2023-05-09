@@ -27,7 +27,9 @@
 # define P2 PI/2
 # define P3 3*PI/2
 # define DR4 0.00436332
-# define SIZE 32
+# define DR 0.0174533
+# define DR8 0.00218166
+# define SIZE 8
 
 typedef struct s_data
 {

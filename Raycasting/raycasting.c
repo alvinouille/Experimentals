@@ -10,16 +10,16 @@ void	simply_line(t_game *game, t_moh2f start, t_moh2f end, int color)
 	int y;
 
 	y = start.y;
-	while (start.x <= end.x + 1)
-	{
+	// while (start.x <= end.x)
+	// {
 		while (y <= end.y)
 		{
 			img_pixel_put((&game->img), start.x, y, color);
 			y++;
 		}
-		y = start.y;
-		start.x++;
-	}
+		// y = start.y;
+	// 	start.x++;
+	// }
 }
 
 void	drawRays2D(t_game *game)
@@ -33,13 +33,13 @@ void	drawRays2D(t_game *game)
 	int color;
 	t_moh2f next, depart, fin;
 
-	ra = game->pa - (DR4 * 120);
+	ra = game->pa - (DR8 * 240);
 	if (ra < 0)
 		ra += 2 * PI;
 	else if (ra > 2 * PI)
 		ra -= 2 * PI;
 	r = 0;
-	while (r < 240)
+	while (r < 480)
 	{
 		// CHECK HORIZONTAL LINES
 		dof = 0;
@@ -61,7 +61,7 @@ void	drawRays2D(t_game *game)
 			yo = SIZE;
 			xo = -yo * aTan;
 		}
-		if (ra < 0.1 || ra == PI) //looking horizontally
+		if (ra <= 0 || ra == PI) //looking horizontally
 		{
 			rx = game->player_pos.x;
 			ry = game->player_pos.y;
@@ -151,13 +151,13 @@ void	drawRays2D(t_game *game)
 	if (lineH > 520)
 		lineH = 520;
 	lineO = 700 - lineH / 2;   //line offset to be more central
-	depart.x = r * 2 + 250;
+	depart.x = r * 1 + 250;
 	depart.y = lineO;
-	fin.x = r * 2 + 250;
+	fin.x = r * 1 + 250;
 	fin.y = lineH + lineO;
 	simply_line(game, depart, fin, color);
 	r++;
-	ra += DR4;
+	ra += DR8;
 	if (ra < 0)
 		ra += 2 * PI;
 	else if (ra > 2 * PI)
