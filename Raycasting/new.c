@@ -13,6 +13,31 @@ int	is_wall(t_game *game, t_moh2f pos)
 		return (0);
 }
 
+void	cleaner(t_game *game)
+{
+	int	i;
+
+	i = 0;
+	if (game->tab)
+	{
+		while (game->tab[i])
+			free(game->tab[i++]);
+		free(game->tab);
+	}
+	if (game->win && game->mlx)
+	{
+		mlx_clear_window(game->mlx, game->win);
+		mlx_destroy_window(game->mlx, game->win);
+	}
+	if (game->img.img)
+		mlx_destroy_image(game->mlx, game->img.img);
+	if (game->mlx)
+	{
+		mlx_destroy_display(game->mlx);
+		free(game->mlx);
+	}
+}
+
 int	deal_key(int key_symbole, t_game *game)
 {
 	t_moh2f next_pos;
@@ -21,6 +46,7 @@ int	deal_key(int key_symbole, t_game *game)
 	if (key_symbole == XK_Escape)
 	{
 		mlx_loop_end(game->mlx);
+		cleaner(game);
 		exit(0);
 	}
 	if (key_symbole == W)
@@ -88,8 +114,8 @@ void	grey_screen(t_game *game)
 	int	x;
 	int	y;
 
-	x = 1;
-	y = 1;
+	x = 0;
+	y = 0;
 	while (y < W_HEIGHT)
 	{
 		while (x < W_WIDTH)
@@ -168,9 +194,9 @@ void	drawPov(t_game *game)
 int	display_(t_game *game)
 {
 	grey_screen(game);
+	drawRays2D(game);
 	drawWall(game);
 	drawPlayer(game);
-	drawRays2D(game);
 	drawPov(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
 	return (0);
@@ -252,6 +278,7 @@ int	main(int ac, char **av)
 	int fd = open(av[1], O_RDONLY);
 	char *str = gnl(fd);
 	game.tab = ft_split(str, '\n');
+	free(str);
 	int i = 0;
 	while (game.tab[i])
 		printf("%s \n", game.tab[i++]);

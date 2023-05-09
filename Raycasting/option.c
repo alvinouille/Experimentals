@@ -52,6 +52,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		    str[i++] = s2[j++];
     }
 	str[i] = '\0';
+	free(s1);
 	return (str);
 }
 
@@ -228,6 +229,7 @@ char	*gnl(int fd)
 			ft_putstr_fd("Malloc failed !\n", 2);
 			exit(2);
 		}
+		free(tmp);
 	}
 	if (!tmp && !str)
 	{

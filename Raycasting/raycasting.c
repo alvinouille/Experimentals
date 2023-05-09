@@ -8,18 +8,20 @@ float	shorter_dist(double ax, double ay, double bx, double by)
 void	simply_line(t_game *game, t_moh2f start, t_moh2f end, int color)
 {
 	int y;
+	int	x;
 
 	y = start.y;
-	// while (start.x <= end.x)
-	// {
+	x = start.x;
+	while (x <= start.x + 1)
+	{
 		while (y <= end.y)
 		{
-			img_pixel_put((&game->img), start.x, y, color);
+			img_pixel_put((&game->img), x, y, color);
 			y++;
 		}
-		// y = start.y;
-	// 	start.x++;
-	// }
+		y = start.y;
+		x++;
+	}
 }
 
 void	drawRays2D(t_game *game)
@@ -31,7 +33,7 @@ void	drawRays2D(t_game *game)
 	double lineH, lineO; 
 	double ca;
 	int color;
-	t_moh2f next, depart, fin;
+	t_moh2f next, depart, fin, ceil, floor;
 
 	ra = game->pa - (DR8 * 240);
 	if (ra < 0)
@@ -39,6 +41,7 @@ void	drawRays2D(t_game *game)
 	else if (ra > 2 * PI)
 		ra -= 2 * PI;
 	r = 0;
+	// printf("START\n");
 	while (r < 480)
 	{
 		// CHECK HORIZONTAL LINES
@@ -46,7 +49,7 @@ void	drawRays2D(t_game *game)
 		disH = 1000000;
 		hx = game->player_pos.x;
 		hy = game->player_pos.y;
-		aTan = -1/tan(ra); 
+		aTan = (double)-1/tan(ra); 
 		if (ra < PI)  //looking down
 		{
 			ry = (((int)game->player_pos.y / SIZE) *SIZE) -0.0001;	
@@ -61,7 +64,7 @@ void	drawRays2D(t_game *game)
 			yo = SIZE;
 			xo = -yo * aTan;
 		}
-		if (ra <= 0 || ra == PI) //looking horizontally
+		if (ra < 0 || ra == PI) //looking horizontally
 		{
 			rx = game->player_pos.x;
 			ry = game->player_pos.y;
@@ -93,7 +96,7 @@ void	drawRays2D(t_game *game)
 	nTan = -tan(ra); 
 	if (ra < P2 || ra > P3)  //looking right
 	{
-		rx = (((int)game->player_pos.x / SIZE) *SIZE) -0.0001;
+		rx = (((int)game->player_pos.x / SIZE) *SIZE) - 0.0001;
 		ry = (game->player_pos.x - rx) * nTan + game->player_pos.y;
 		xo = -SIZE;
 		yo = -xo * nTan;
@@ -105,6 +108,12 @@ void	drawRays2D(t_game *game)
 		xo = SIZE;
 		yo = -xo * nTan;
 	}
+	// if (ra == P2 || ra == P3) //looking vertically
+	// {
+	// 	rx = game->player_pos.x;
+	// 	ry = game->player_pos.y;
+	// 	dof = game->map.length;
+	// }
 	while (dof < game->map.length)
 	{
 		mx = (int)rx / SIZE;
@@ -123,23 +132,28 @@ void	drawRays2D(t_game *game)
 			dof += 1;
 		}
 	}
-	if (disV <= disH)
+	if (disV + 0.001 < disH)
 	{
 		rx = vx;
 		ry = vy;
 		disT = disV;
 		color = 0x00DB1702;
 	}
-	else if (disH < disV)
+	else if (disH <= disV)
 	{
 		rx = hx;
 		ry = hy;
 		disT = disH;
-		color = 0x00FF0000;
+		color = 0x00FF0000; //clair
 	}
+	// printf("disV : %f, disH = %f, disT = %f", disV, disH, disT);
+	// if (disT == disH)
+	// 	printf(" H\n");
+	// else
+	// 	printf(" V\n");
 	next.x = rx;
 	next.y = ry;
-	bresenham(game->img, game->player_pos, next, 0x000000FF);
+	// bresenham(game->img, game->player_pos, next, 0x000000FF);
 	// DRAW 3D WALLS
 	ca = game->pa - ra;
 	if (ca < 0)
@@ -147,15 +161,22 @@ void	drawRays2D(t_game *game)
 	else if (ca > 2 * PI)
 		ca -= 2 * PI;
 	disT = disT * cos(ca); // to fix fish eye
-	lineH = (SIZE * 520) /disT; //line height
-	if (lineH > 520)
-		lineH = 520;
-	lineO = 700 - lineH / 2;   //line offset to be more central
-	depart.x = r * 1 + 250;
+	lineH = (SIZE * W_HEIGHT) /disT; //line height
+	if (lineH > W_HEIGHT)
+		lineH = W_HEIGHT;
+	lineO = 400 - lineH / 2; //line offset to be more central
+	depart.x = r * 2;
 	depart.y = lineO;
-	fin.x = r * 1 + 250;
+	ceil.x = r * 2;
+	ceil.y = 0;
+	simply_line(game, ceil, depart, 0x00808080);
+	fin.x = r * 2;
 	fin.y = lineH + lineO;
 	simply_line(game, depart, fin, color);
+	floor.x = r * 2;
+	floor.y = W_HEIGHT;
+	simply_line(game, fin, floor, 0x00E1C699);
+	bresenham(game->img, game->player_pos, next, 0x000000FF);
 	r++;
 	ra += DR8;
 	if (ra < 0)
@@ -163,4 +184,5 @@ void	drawRays2D(t_game *game)
 	else if (ra > 2 * PI)
 		ra -= 2 * PI;
 	}
+	// printf("END\n");
 }

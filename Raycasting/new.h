@@ -13,8 +13,8 @@
 # include <stdio.h>
 # include <stdlib.h>
 
-# define W_WIDTH	2000
-# define W_HEIGHT	1280
+# define W_WIDTH	960
+# define W_HEIGHT	800
 
 # define ESC 65307
 # define W 119
@@ -73,6 +73,11 @@ typedef struct s_game
 void	bresenham(t_data img, t_moh2f curr, t_moh2f next, int color);
 void	img_pixel_put(t_data *img, int x, int y, int color);
 void	drawRays2D(t_game *game);
+
+void	drawPov(t_game *game);
+void	drawWall(t_game *game);
+void	drawPlayer(t_game *game);
+void	drawCube(t_game *game, t_moh2f pos, int size, int color);
 
 
 char	*gnl(int fd);
