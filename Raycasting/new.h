@@ -57,6 +57,12 @@ typedef struct s_map
 	int		size;
 }			t_map;
 
+typedef struct s_forthenorme
+{
+	t_moh2f curr;
+	t_moh2f next;
+}			t_forthenorme;
+
 typedef struct s_game
 {
 	void	*mlx;
@@ -147,6 +153,17 @@ void		bresenham(t_data img, t_moh2f curr, t_moh2f next, int color);
 void		cleaner(t_game *game);
 void		img_pixel_put(t_data *img, int x, int y, int color);
 int			is_wall(t_game *game, t_moh2f pos);
+
+/*	BRESENHAM	*/
+void	third(t_data img, t_moh2f curr, t_moh2f next, int color);
+void	fourth(t_data img, t_moh2f curr, t_moh2f next, int color);
+void	eight(t_data img, t_moh2f curr, t_moh2f next, int color);
+void	seventh(t_data img, t_moh2f curr, t_moh2f next, int color);
+void	first(t_data img, t_moh2f curr, t_moh2f next, int color);
+void	second(t_data img, t_moh2f curr, t_moh2f next, int color);
+void	vertical(t_data img, t_moh2f curr, t_moh2f next, int color);
+void	fifth(t_data img, t_moh2f curr, t_moh2f next, int color);
+void	sixth(t_data img, t_moh2f curr, t_moh2f next, int color);
 
 /*	OPTION	*/
 char		*gnl(int fd);
