@@ -25,7 +25,6 @@ void	first(t_data img, t_moh2f curr, t_moh2f next, int color)
 	e = next.x - curr.x;
 	dx = 2 * e;
 	dy = 2 * (next.y - curr.y);
-	// printf("1\n");
 	while (1)
 	{
 		if (x < W_WIDTH && x > 0 && y < W_HEIGHT && y > 0)
@@ -55,7 +54,6 @@ void	second(t_data img, t_moh2f curr, t_moh2f next, int color)
 	e = next.y - curr.y;
 	dy = 2 * e;
 	dx = 2 * (next.x - curr.x);
-	// printf("2\n");
 	while (1)
 	{
 		if (x < W_WIDTH && x > 0 && y < W_HEIGHT && y > 0)
@@ -112,7 +110,6 @@ void	fifth(t_data img, t_moh2f curr, t_moh2f next, int color)
 	e = next.y - curr.y;
 	dy = 2 * e;
 	dx = 2 * (next.x - curr.x);
-	// printf("5\n");
 	while (1)
 	{
 		if (x < W_WIDTH && x > 0 && y < W_HEIGHT && y > 0)
@@ -142,7 +139,6 @@ void	sixth(t_data img, t_moh2f curr, t_moh2f next, int color)
 	e = next.y - curr.y;
 	dy = 2 * e;
 	dx = 2 * (next.x - curr.x);
-	// printf("6\n");
 	while (1)
 	{
 		if (x < W_WIDTH && x > 0 && y < W_HEIGHT && y > 0)
@@ -173,7 +169,6 @@ void	third(t_data img, t_moh2f curr, t_moh2f next, int color)
 	e = next.y - curr.y;
 	dy = 2 * e;
 	dx = 2 * (next.x - curr.x);
-	// printf("3\n");
 	while (1)
 	{
 		if (x < W_WIDTH && x > 0 && y < W_HEIGHT && y > 0)
@@ -203,7 +198,6 @@ void	fourth(t_data img, t_moh2f curr, t_moh2f next, int color)
 	e = next.x - curr.x;
 	dx = 2 * e;
 	dy = 2 * (next.y - curr.y);
-	// printf("4\n");
 	while (1)
 	{
 		if (x < W_WIDTH && x > 0 && y < W_HEIGHT && y > 0)
@@ -233,7 +227,6 @@ void	eight(t_data img, t_moh2f curr, t_moh2f next, int color)
 	e = next.x - curr.x;
 	dx = 2 * e;
 	dy = 2 * (next.y - curr.y);
-	// printf("8\n");
 	while (1)
 	{
 		if (x < W_WIDTH && x > 0 && y < W_HEIGHT && y > 0)
@@ -263,7 +256,6 @@ void	seventh(t_data img, t_moh2f curr, t_moh2f next, int color)
 	e = next.y - curr.y;
 	dy = 2 * e;
 	dx = 2 * (next.x - curr.x);
-	// printf("7\n");
 	while (1)
 	{
 		if (x < W_WIDTH && x > 0 && y < W_HEIGHT && y > 0)

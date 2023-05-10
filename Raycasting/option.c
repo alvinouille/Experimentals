@@ -1,17 +1,19 @@
 
 #include "new.h"
-#include <string.h>
 #include <fcntl.h>
+#include <string.h>
 #include <unistd.h>
 
-# define BUFFER_SIZE 1
+#define BUFFER_SIZE 1
 
-void    ft_putstr_fd(char *str, int fd)
+void	ft_putstr_fd(char *str, int fd)
 {
-    int i = 0;
-    while (str[i]) 
-        i++;
-    write(fd, str, i);
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	write(fd, str, i);
 }
 
 int	ft_strlen(char *s)
@@ -26,8 +28,7 @@ int	ft_strlen(char *s)
 	return (i);
 }
 
-
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*str;
 	int		i;
@@ -37,25 +38,24 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	i = 0;
 	j = 0;
 	length = ft_strlen(s1) + ft_strlen(s2);
-	str = (char *) malloc(sizeof(char) * length + 1);
+	str = (char *)malloc(sizeof(char) * length + 1);
 	if (!str)
 		return (NULL);
-    if (s1)
+	if (s1)
 	{
-        while (s1[j])
-		    str[i++] = s1[j++];
-    }
+		while (s1[j])
+			str[i++] = s1[j++];
+	}
 	j = 0;
 	if (s2)
-    {
-        while (s2[j])
-		    str[i++] = s2[j++];
-    }
+	{
+		while (s2[j])
+			str[i++] = s2[j++];
+	}
 	str[i] = '\0';
 	free(s1);
 	return (str);
 }
-
 
 int	ft_strchr(char *s, int c)
 {
@@ -66,7 +66,7 @@ int	ft_strchr(char *s, int c)
 		return (0);
 	while (s[i] != '\0')
 	{
-		if (s[i] == (char) c)
+		if (s[i] == (char)c)
 			return (1);
 		i++;
 	}
@@ -156,8 +156,8 @@ char	*ft_strjoin_modif(char *keep, char *buff, size_t i, size_t j)
 
 char	*loopin(int fd, char **keep)
 {
-	char		*buff;
-	size_t		size;
+	char	*buff;
+	size_t	size;
 
 	buff = malloc((BUFFER_SIZE + 1));
 	if (!buff)
@@ -170,7 +170,7 @@ char	*loopin(int fd, char **keep)
 	while (!ft_strchr((*keep), '\n') && size != 0)
 	{
 		size = read(fd, buff, BUFFER_SIZE);
-		if (size == (size_t) - 1)
+		if (size == (size_t)-1)
 		{
 			free(*keep);
 			free(buff);
@@ -316,13 +316,13 @@ static char	**splitting(char **tab, char const *s, char c)
 
 char	**ft_split(char const *s, char c)
 {
-	char	**tab;
+	char **tab;
 
 	if (!s)
 		return (0);
 	if (count_words(s, c) == 0)
 		return (0);
-	tab = (char **) malloc(sizeof(char *) * (count_words(s, c) + 1));
+	tab = (char **)malloc(sizeof(char *) * (count_words(s, c) + 1));
 	if (!tab)
 		return (NULL);
 	return (splitting(tab, s, c));

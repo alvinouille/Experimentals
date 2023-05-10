@@ -1,188 +1,147 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   raycasting.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ale-sain <ale-sain@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/10 17:45:54 by ale-sain          #+#    #+#             */
+/*   Updated: 2023/05/10 17:48:05 by ale-sain         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "new.h"
 
-float	shorter_dist(double ax, double ay, double bx, double by)
+/*looking down then up then horizontally*/
+void	spawn_horiz(t_game *game, t_raycast *rc)
 {
-	return (sqrt ((bx - ax) * (bx - ax) + (by - ay) * (by - ay)));
-}
-
-void	simply_line(t_game *game, t_moh2f start, t_moh2f end, int color)
-{
-	int y;
-	int	x;
-
-	y = start.y;
-	x = start.x;
-	while (x <= start.x + 1)
+	rc->rayH.point.x = game->player_pos.x;
+	rc->rayH.point.y = game->player_pos.y;
+	rc->dda.aTan = (float)-1 / tan(rc->dda.rot_angle);
+	if (rc->dda.rot_angle < PI)
 	{
-		while (y <= end.y)
-		{
-			img_pixel_put((&game->img), x, y, color);
-			y++;
-		}
-		y = start.y;
-		x++;
+		rc->dda.ray.y = (((int)game->player_pos.y / SIZE) * SIZE) - 0.0001;
+		rc->dda.ray.x = (game->player_pos.y - rc->dda.ray.y) * rc->dda.aTan
+			+ game->player_pos.x;
+		rc->dda.pas.y = -SIZE;
+		rc->dda.pas.x = -rc->dda.pas.y * rc->dda.aTan;
+	}
+	if (rc->dda.rot_angle > PI)
+	{
+		rc->dda.ray.y = (((int)game->player_pos.y / SIZE) * SIZE) + SIZE;
+		rc->dda.ray.x = (game->player_pos.y - rc->dda.ray.y) * rc->dda.aTan
+			+ game->player_pos.x;
+		rc->dda.pas.y = SIZE;
+		rc->dda.pas.x = -rc->dda.pas.y * rc->dda.aTan;
+	}
+	if (rc->dda.rot_angle < 0 || rc->dda.rot_angle == PI)
+	{
+		rc->dda.ray.x = game->player_pos.x;
+		rc->dda.ray.y = game->player_pos.y;
+		rc->dof = game->map.height;
 	}
 }
 
-void	drawRays2D(t_game *game)
+void	dda_horiz(t_game *game, t_raycast *rc)
 {
-	int r, mx, my, mp, dof;
-	double rx, ry, ra, xo, yo, nTan, aTan;
-	double disV, disH, disT;
-	double hx, hy, vx, vy;
-	double lineH, lineO; 
-	double ca;
-	int color;
-	t_moh2f next, depart, fin, ceil, floor;
-
-	ra = game->pa - (DR8 * 240);
-	if (ra < 0)
-		ra += 2 * PI;
-	else if (ra > 2 * PI)
-		ra -= 2 * PI;
-	r = 0;
-	// printf("START\n");
-	while (r < 480)
+	while (rc->dof < game->map.height)
 	{
-		// CHECK HORIZONTAL LINES
-		dof = 0;
-		disH = 1000000;
-		hx = game->player_pos.x;
-		hy = game->player_pos.y;
-		aTan = (double)-1/tan(ra); 
-		if (ra < PI)  //looking down
+		rc->map.x = (int)rc->dda.ray.x / SIZE;
+		rc->map.y = (int)rc->dda.ray.y / SIZE;
+		if (rc->map.x >= 0 && rc->map.y >= 0 && rc->map.x < game->map.length
+			&& rc->map.y < game->map.height
+			&& game->tab[rc->map.y][rc->map.x] == '1')
 		{
-			ry = (((int)game->player_pos.y / SIZE) *SIZE) -0.0001;	
-			rx = (game->player_pos.y - ry) * aTan + game->player_pos.x;
-			yo = -SIZE;
-			xo = -yo * aTan;
-		}
-		if (ra > PI)  //looking up
-		{
-			ry = (((int)game->player_pos.y / SIZE) *SIZE) + SIZE;
-			rx = (game->player_pos.y - ry) * aTan + game->player_pos.x;
-			yo = SIZE;
-			xo = -yo * aTan;
-		}
-		if (ra < 0 || ra == PI) //looking horizontally
-		{
-			rx = game->player_pos.x;
-			ry = game->player_pos.y;
-			dof = game->map.height;
-		}
-		while (dof < game->map.height)
-		{
-			mx = (int)rx / SIZE;
-			my = (int)ry / SIZE;
-			if (mx >= 0 && my >= 0 && mx < game->map.length && my < game->map.height && game->tab[my][mx] == '1')
-			{
-				hx = rx;
-				hy = ry;
-				disH = shorter_dist(game->player_pos.x, game->player_pos.y, hx, hy);
-				dof = game->map.height;
-			}
-			else
-			{
-				rx += xo;
-				ry += yo;
-				dof += 1;
-			}
-		}
-	// VERTICAL LINE
-	dof = 0;
-	disV = 1000000;
-	vx = game->player_pos.x;
-	vy = game->player_pos.y;
-	nTan = -tan(ra); 
-	if (ra < P2 || ra > P3)  //looking right
-	{
-		rx = (((int)game->player_pos.x / SIZE) *SIZE) - 0.0001;
-		ry = (game->player_pos.x - rx) * nTan + game->player_pos.y;
-		xo = -SIZE;
-		yo = -xo * nTan;
-	}
-	if (ra > P2 && ra < P3)  //looking left
-	{
-		rx = (((int)game->player_pos.x / SIZE) *SIZE) + SIZE;
-		ry = (game->player_pos.x - rx) * nTan + game->player_pos.y;
-		xo = SIZE;
-		yo = -xo * nTan;
-	}
-	// if (ra == P2 || ra == P3) //looking vertically
-	// {
-	// 	rx = game->player_pos.x;
-	// 	ry = game->player_pos.y;
-	// 	dof = game->map.length;
-	// }
-	while (dof < game->map.length)
-	{
-		mx = (int)rx / SIZE;
-		my = (int)ry / SIZE;
-		if (mx >= 0 && my >= 0 && mx < game->map.length && my < game->map.height && game->tab[my][mx] == '1')
-		{
-			vx = rx;
-			vy = ry;
-			disV = shorter_dist(game->player_pos.x, game->player_pos.y, vx, vy);
-			dof = game->map.length;
+			rc->rayH.point.x = rc->dda.ray.x;
+			rc->rayH.point.y = rc->dda.ray.y;
+			rc->rayH.dis = shorter_dist(game->player_pos.x, game->player_pos.y,
+					rc->rayH.point.x, rc->rayH.point.y);
+			rc->dof = game->map.height;
 		}
 		else
 		{
-			rx += xo;
-			ry += yo;
-			dof += 1;
+			rc->dda.ray.x += rc->dda.pas.x;
+			rc->dda.ray.y += rc->dda.pas.y;
+			rc->dof += 1;
 		}
 	}
-	if (disV + 0.001 < disH)
+}
+
+/*looking right, then looking left*/
+void	spawn_vert(t_game *game, t_raycast *rc)
+{
+	rc->rayV.point.x = game->player_pos.x;
+	rc->rayV.point.y = game->player_pos.y;
+	rc->dda.nTan = -tan(rc->dda.rot_angle);
+	if (rc->dda.rot_angle < P2 || rc->dda.rot_angle > P3)
 	{
-		rx = vx;
-		ry = vy;
-		disT = disV;
-		color = 0x00DB1702;
+		rc->dda.ray.x = (((int)game->player_pos.x / SIZE) * SIZE) - 0.0001;
+		rc->dda.ray.y = (game->player_pos.x - rc->dda.ray.x) * rc->dda.nTan
+			+ game->player_pos.y;
+		rc->dda.pas.x = -SIZE;
+		rc->dda.pas.y = -rc->dda.pas.x * rc->dda.nTan;
 	}
-	else if (disH <= disV)
+	if (rc->dda.rot_angle > P2 && rc->dda.rot_angle < P3)
 	{
-		rx = hx;
-		ry = hy;
-		disT = disH;
-		color = 0x00FF0000; //clair
+		rc->dda.ray.x = (((int)game->player_pos.x / SIZE) * SIZE) + SIZE;
+		rc->dda.ray.y = (game->player_pos.x - rc->dda.ray.x) * rc->dda.nTan
+			+ game->player_pos.y;
+		rc->dda.pas.x = SIZE;
+		rc->dda.pas.y = -rc->dda.pas.x * rc->dda.nTan;
 	}
-	// printf("disV : %f, disH = %f, disT = %f", disV, disH, disT);
-	// if (disT == disH)
-	// 	printf(" H\n");
-	// else
-	// 	printf(" V\n");
-	next.x = rx;
-	next.y = ry;
-	// bresenham(game->img, game->player_pos, next, 0x000000FF);
-	// DRAW 3D WALLS
-	ca = game->pa - ra;
-	if (ca < 0)
-		ca += 2 * PI;
-	else if (ca > 2 * PI)
-		ca -= 2 * PI;
-	disT = disT * cos(ca); // to fix fish eye
-	lineH = (SIZE * W_HEIGHT) /disT; //line height
-	if (lineH > W_HEIGHT)
-		lineH = W_HEIGHT;
-	lineO = 400 - lineH / 2; //line offset to be more central
-	depart.x = r * 2;
-	depart.y = lineO;
-	ceil.x = r * 2;
-	ceil.y = 0;
-	simply_line(game, ceil, depart, 0x00808080);
-	fin.x = r * 2;
-	fin.y = lineH + lineO;
-	simply_line(game, depart, fin, color);
-	floor.x = r * 2;
-	floor.y = W_HEIGHT;
-	simply_line(game, fin, floor, 0x00E1C699);
-	bresenham(game->img, game->player_pos, next, 0x000000FF);
-	r++;
-	ra += DR8;
-	if (ra < 0)
-		ra += 2 * PI;
-	else if (ra > 2 * PI)
-		ra -= 2 * PI;
+}
+
+void	dda_vert(t_game *game, t_raycast *rc)
+{
+	while (rc->dof < game->map.length)
+	{
+		rc->map.x = (int)rc->dda.ray.x / SIZE;
+		rc->map.y = (int)rc->dda.ray.y / SIZE;
+		if (rc->map.x >= 0 && rc->map.y >= 0 && rc->map.x < game->map.length
+			&& rc->map.y < game->map.height
+			&& game->tab[rc->map.y][rc->map.x] == '1')
+		{
+			rc->rayV.point.x = rc->dda.ray.x;
+			rc->rayV.point.y = rc->dda.ray.y;
+			rc->rayV.dis = shorter_dist(game->player_pos.x, game->player_pos.y,
+					rc->rayV.point.x, rc->rayV.point.y);
+			rc->dof = game->map.length;
+		}
+		else
+		{
+			rc->dda.ray.x += rc->dda.pas.x;
+			rc->dda.ray.y += rc->dda.pas.y;
+			rc->dof += 1;
+		}
 	}
-	// printf("END\n");
+}
+
+/*Spawn horizontal rays, then verticals, then choose the shorter,
+	then draw the pixel columns*/
+void	raycasting(t_game *game)
+{
+	t_raycast	rc;
+
+	rc.dda.rot_angle = game->pa - (DR16 * 480);
+	rc.ray = 0;
+	while (rc.ray < 960)
+	{
+		if (rc.dda.rot_angle < 0)
+			rc.dda.rot_angle += 2 * PI;
+		else if (rc.dda.rot_angle > 2 * PI)
+			rc.dda.rot_angle -= 2 * PI;
+		rc.dof = 0;
+		rc.rayH.dis = 1000000;
+		spawn_horiz(game, &rc);
+		dda_horiz(game, &rc);
+		rc.dof = 0;
+		rc.rayV.dis = 1000000;
+		spawn_vert(game, &rc);
+		dda_vert(game, &rc);
+		shorter_ray(&rc);
+		draw_3d(game, &rc);
+		bresenham(game->img, game->player_pos, rc.draw.next, 0x000000FF);
+		rc.ray++;
+		rc.dda.rot_angle += DR16;
+	}
 }
