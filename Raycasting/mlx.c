@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-sain <ale-sain@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alvina <alvina@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 13:55:39 by ale-sain          #+#    #+#             */
-/*   Updated: 2023/05/10 17:45:08 by ale-sain         ###   ########.fr       */
+/*   Updated: 2023/05/11 17:43:35 by alvina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,23 @@ void	deplacement_key(int key_symbole, t_game *game)
 	next_pos = game->player_pos;
 	if (key_symbole == W)
 	{
-		next_pos.y -= game->pd.y;
-		next_pos.x -= game->pd.x;
+		next_pos.y -= (game->pd.y * 10);
+		next_pos.x -= (game->pd.x * 10);
 	}
 	if (key_symbole == S)
 	{
-		next_pos.y += game->pd.y;
-		next_pos.x += game->pd.x;
+		next_pos.y += (game->pd.y * 10);
+		next_pos.x += (game->pd.x * 10);
 	}
 	if (key_symbole == A)
 	{
-		next_pos.x -= game->pd.y;
-		next_pos.y += game->pd.x;
+		next_pos.x -= (game->pd.y * 10);
+		next_pos.y += (game->pd.x * 10);
 	}
 	if (key_symbole == D)
 	{
-		next_pos.x += game->pd.y;
-		next_pos.y -= game->pd.x;
+		next_pos.x += (game->pd.y *10);
+		next_pos.y -= (game->pd.x * 10);
 	}
 	if (!is_wall(game, next_pos))
 		game->player_pos = next_pos;
@@ -74,9 +74,9 @@ int	display_(t_game *game)
 {
 	grey_screen(game);
 	raycasting(game);
-	draw_wall(game);
-	draw_player(game);
-	draw_pov(game);
+	// draw_wall(game);
+	// draw_player(game);
+	// draw_pov(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
 	return (0);
 }
@@ -84,6 +84,7 @@ int	display_(t_game *game)
 void	mlx(t_game game)
 {
 	game.mlx = mlx_init();
+	init_texture(&game);
 	game.win = mlx_new_window(game.mlx, W_WIDTH, W_HEIGHT, "Cub3D");
 	game.img.img = mlx_new_image(game.mlx, W_WIDTH, W_HEIGHT);
 	game.img.addr = mlx_get_data_addr(game.img.img, &(game.img.bits_per_pixel),
@@ -108,6 +109,8 @@ int	main(int ac, char **av)
 	i = 0;
 	while (game.tab[i])
 		printf("%s \n", game.tab[i++]);
+	if (av[2])
+		game.path_text = av[2];
 	init_player(&game, 0, 0);
 	init_map(&game);
 	mlx(game);

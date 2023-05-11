@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-sain <ale-sain@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alvina <alvina@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 17:45:54 by ale-sain          #+#    #+#             */
-/*   Updated: 2023/05/10 17:48:05 by ale-sain         ###   ########.fr       */
+/*   Updated: 2023/05/11 15:48:41 by alvina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,11 @@ void	spawn_horiz(t_game *game, t_raycast *rc)
 			+ game->player_pos.x;
 		rc->dda.pas.y = -SIZE;
 		rc->dda.pas.x = -rc->dda.pas.y * rc->dda.aTan;
+		rc->draw.h_facing = DOWN;
 	}
 	if (rc->dda.rot_angle > PI)
 	{
+		rc->draw.h_facing = UP;
 		rc->dda.ray.y = (((int)game->player_pos.y / SIZE) * SIZE) + SIZE;
 		rc->dda.ray.x = (game->player_pos.y - rc->dda.ray.y) * rc->dda.aTan
 			+ game->player_pos.x;
@@ -36,6 +38,7 @@ void	spawn_horiz(t_game *game, t_raycast *rc)
 	}
 	if (rc->dda.rot_angle < 0 || rc->dda.rot_angle == PI)
 	{
+		rc->draw.h_facing = UP;
 		rc->dda.ray.x = game->player_pos.x;
 		rc->dda.ray.y = game->player_pos.y;
 		rc->dof = game->map.height;
@@ -80,6 +83,7 @@ void	spawn_vert(t_game *game, t_raycast *rc)
 			+ game->player_pos.y;
 		rc->dda.pas.x = -SIZE;
 		rc->dda.pas.y = -rc->dda.pas.x * rc->dda.nTan;
+		rc->draw.v_facing = RIGHTT;
 	}
 	if (rc->dda.rot_angle > P2 && rc->dda.rot_angle < P3)
 	{
@@ -88,6 +92,7 @@ void	spawn_vert(t_game *game, t_raycast *rc)
 			+ game->player_pos.y;
 		rc->dda.pas.x = SIZE;
 		rc->dda.pas.y = -rc->dda.pas.x * rc->dda.nTan;
+		rc->draw.v_facing = LEFTT;
 	}
 }
 
@@ -140,7 +145,7 @@ void	raycasting(t_game *game)
 		dda_vert(game, &rc);
 		shorter_ray(&rc);
 		draw_3d(game, &rc);
-		bresenham(game->img, game->player_pos, rc.draw.next, 0x000000FF);
+		// bresenham(game->img, game->player_pos, rc.draw.next, 0x000000FF);
 		rc.ray++;
 		rc.dda.rot_angle += DR16;
 	}

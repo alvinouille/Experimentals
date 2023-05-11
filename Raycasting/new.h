@@ -27,7 +27,13 @@
 # define P2 PI / 2
 # define P3 3 * PI / 2
 # define DR16 0.00109083078
-# define SIZE 8
+# define SIZE 200
+# define VERTICAL 0
+# define HORIZONTAL 1
+# define UP 0
+# define DOWN 1
+# define RIGHTT 2
+# define LEFTT 3
 
 typedef struct s_data
 {
@@ -63,6 +69,15 @@ typedef struct s_forthenorme
 	t_moh2f next;
 }			t_forthenorme;
 
+typedef struct s_txt
+{
+	t_data 	img;
+	int 	*tab;
+	int		height;
+	int		width;
+}			t_txt;
+
+
 typedef struct s_game
 {
 	void	*mlx;
@@ -73,6 +88,9 @@ typedef struct s_game
 	char	**tab;
 	t_moh2f	pd;
 	t_moh2f	player_pos;
+	char	*path_text;
+	int		*curr_txt;
+	t_txt 	texture[4];
 }			t_game;
 
 typedef struct s_dda
@@ -92,15 +110,18 @@ typedef struct s_ray
 
 typedef struct s_draw
 {
-	float	lineH;
-	float	lineO;
+	int		lineH;
+	int		lineO;
 	float	ca;
 	int		color;
-	t_moh2f	next;
-	t_moh2f	depart;
-	t_moh2f	fin;
-	t_moh2f	ceil;
-	t_moh2f	floor;
+	int		orient;
+	int		h_facing;
+	int		v_facing;
+	t_moh2i	next;
+	t_moh2i	depart;
+	t_moh2i	fin;
+	t_moh2i	ceil;
+	t_moh2i	floor;
 }			t_draw;
 
 typedef struct s_raycast
@@ -142,7 +163,7 @@ void		spawn_horiz(t_game *game, t_raycast *rc);
 
 /*	RAYCAST_UTILS	*/
 float		shorter_dist(float ax, float ay, float bx, float by);
-void		simply_line(t_game *game, t_moh2f start, t_moh2f end, int color);
+void		simply_line(t_game *game, t_moh2i start, t_moh2i end, int color);
 void		draw_3d(t_game *game, t_raycast *rc);
 void		shorter_ray(t_raycast *rc);
 
@@ -153,17 +174,21 @@ void		bresenham(t_data img, t_moh2f curr, t_moh2f next, int color);
 void		cleaner(t_game *game);
 void		img_pixel_put(t_data *img, int x, int y, int color);
 int			is_wall(t_game *game, t_moh2f pos);
+int			around(float nb);
 
 /*	BRESENHAM	*/
-void	third(t_data img, t_moh2f curr, t_moh2f next, int color);
-void	fourth(t_data img, t_moh2f curr, t_moh2f next, int color);
-void	eight(t_data img, t_moh2f curr, t_moh2f next, int color);
-void	seventh(t_data img, t_moh2f curr, t_moh2f next, int color);
-void	first(t_data img, t_moh2f curr, t_moh2f next, int color);
-void	second(t_data img, t_moh2f curr, t_moh2f next, int color);
-void	vertical(t_data img, t_moh2f curr, t_moh2f next, int color);
-void	fifth(t_data img, t_moh2f curr, t_moh2f next, int color);
-void	sixth(t_data img, t_moh2f curr, t_moh2f next, int color);
+void		third(t_data img, t_moh2f curr, t_moh2f next, int color);
+void		fourth(t_data img, t_moh2f curr, t_moh2f next, int color);
+void		eight(t_data img, t_moh2f curr, t_moh2f next, int color);
+void		seventh(t_data img, t_moh2f curr, t_moh2f next, int color);
+void		first(t_data img, t_moh2f curr, t_moh2f next, int color);
+void		second(t_data img, t_moh2f curr, t_moh2f next, int color);
+void		vertical(t_data img, t_moh2f curr, t_moh2f next, int color);
+void		fifth(t_data img, t_moh2f curr, t_moh2f next, int color);
+void		sixth(t_data img, t_moh2f curr, t_moh2f next, int color);
+
+/*	TEXTURE */
+void    	init_texture(t_game *game);
 
 /*	OPTION	*/
 char		*gnl(int fd);

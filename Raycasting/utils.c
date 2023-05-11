@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-sain <ale-sain@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alvina <alvina@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 17:25:56 by ale-sain          #+#    #+#             */
-/*   Updated: 2023/05/10 17:46:45 by ale-sain         ###   ########.fr       */
+/*   Updated: 2023/05/11 16:30:00 by alvina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,12 @@ int	is_wall(t_game *game, t_moh2f pos)
 		return (1);
 	else
 		return (0);
+}
+
+int	around(float nb)
+{
+	if (nb - (int)nb > 0.5)
+		return ((int)ceil(nb));
+	else
+		return ((int)floor(nb));
 }
