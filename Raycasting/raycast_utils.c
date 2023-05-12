@@ -6,7 +6,7 @@
 /*   By: alvina <alvina@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 17:17:22 by ale-sain          #+#    #+#             */
-/*   Updated: 2023/05/11 18:03:51 by alvina           ###   ########.fr       */
+/*   Updated: 2023/05/12 17:38:29 by alvina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,13 +82,13 @@ void	draw_3d(t_game *game, t_raycast *rc)
 	rc->draw.depart.y = rc->draw.lineO;
 	rc->draw.ceil.x = rc->ray * 1;
 	rc->draw.ceil.y = 0;
-	simply_line(game, rc->draw.ceil, rc->draw.depart, 0x00808080);
+	simply_line(game, rc->draw.ceil, rc->draw.depart, game->color_ceil);
 	rc->draw.fin.x = rc->ray * 1;
 	rc->draw.fin.y = rc->draw.lineH + rc->draw.lineO;
 	build_wall(game, rc->draw.depart, rc->draw.fin, rc);
 	rc->draw.floor.x = rc->ray * 1;
 	rc->draw.floor.y = W_HEIGHT;
-	simply_line(game, rc->draw.fin, rc->draw.floor, 0x00E1C699);
+	simply_line(game, rc->draw.fin, rc->draw.floor, game->color_floor);
 }
 
 void	shorter_ray(t_raycast *rc)

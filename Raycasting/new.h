@@ -88,6 +88,8 @@ typedef struct s_game
 	char	**tab;
 	t_moh2f	pd;
 	t_moh2f	player_pos;
+	int		color_floor;
+	int		color_ceil;
 	char	*path_text;
 	int		*curr_txt;
 	t_txt 	texture[4];
@@ -146,6 +148,7 @@ void		mlx(t_game game);
 void		init_player_orientation(t_game *game, int i, int j);
 void		init_player(t_game *game, int i, int j);
 void		init_map(t_game *game);
+void		init_color(t_game *game);
 
 /*	DRAW MINIMAP	*/
 void		grey_screen(t_game *game);
@@ -153,6 +156,7 @@ void		draw_cube(t_game *game, t_moh2f pos, int size, int color);
 void		draw_player(t_game *game);
 void		draw_wall(t_game *game);
 void		draw_pov(t_game *game);
+void		draw_ray_minimap(t_game *game, t_raycast *rc);
 
 /*	RAYCASTING	*/
 void		raycasting(t_game *game);
@@ -189,6 +193,7 @@ void		sixth(t_data img, t_moh2f curr, t_moh2f next, int color);
 
 /*	TEXTURE */
 void    	init_texture(t_game *game);
+int 		convert_hexa_color(int red, int green, int blue);
 
 /*	OPTION	*/
 char		*gnl(int fd);

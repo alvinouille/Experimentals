@@ -3,14 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-sain <ale-sain@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alvina <alvina@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 17:22:32 by ale-sain          #+#    #+#             */
-/*   Updated: 2023/05/10 17:43:55 by ale-sain         ###   ########.fr       */
+/*   Updated: 2023/05/12 18:51:40 by alvina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "new.h"
+
+void	grey_screen(t_game *game)
+{
+	int	x;
+	int	y;
+
+	x = 0;
+	y = 0;
+	while (y < W_HEIGHT)
+	{
+		while (x < W_WIDTH)
+		{
+			img_pixel_put((&game->img), x, y, 0x00808080);
+			x++;
+		}
+		x = 0;
+		y++;
+	}
+}
 
 void	init_player_orientation(t_game *game, int i, int j)
 {
@@ -34,7 +53,7 @@ void	init_player(t_game *game, int i, int j)
 		while (game->tab[i][j])
 		{
 			if (game->tab[i][j] == 'N' || game->tab[i][j] == 'E'
-				|| game->tab[i][j] == 'O' || game->tab[i][j] == 'S')
+				|| game->tab[i][j] == 'W' || game->tab[i][j] == 'S')
 			{
 				init_player_orientation(game, i, j);
 				break ;
@@ -71,4 +90,16 @@ void	init_map(t_game *game)
 	game->map.size = game->map.length * game->map.height;
 	printf("height : %d, length : %d, size : %d\n", game->map.height,
 		game->map.length, game->map.size);
+	if (game->map.height * (SIZE / 20) >= W_HEIGHT
+		|| game->map.length * (SIZE / 20) >= W_WIDTH)
+	{
+		printf("MAP TROP GRANDE!");
+		exit(0);
+	}
+}
+
+void	init_color(t_game *game)
+{
+	game->color_ceil = convert_hexa_color(1, 1, 29);
+	game->color_floor = convert_hexa_color(255, 0, 0);
 }

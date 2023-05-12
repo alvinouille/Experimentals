@@ -3,32 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   draw_minimap.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-sain <ale-sain@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alvina <alvina@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 17:24:04 by ale-sain          #+#    #+#             */
-/*   Updated: 2023/05/10 17:43:46 by ale-sain         ###   ########.fr       */
+/*   Updated: 2023/05/12 18:25:20 by alvina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "new.h"
 
-void	grey_screen(t_game *game)
+void	draw_ray_minimap(t_game *game, t_raycast *rc)
 {
-	int	x;
-	int	y;
+	t_moh2f	curr;
+	t_moh2f	next;
 
-	x = 0;
-	y = 0;
-	while (y < W_HEIGHT)
-	{
-		while (x < W_WIDTH)
-		{
-			img_pixel_put((&game->img), x, y, 0x00808080);
-			x++;
-		}
-		x = 0;
-		y++;
-	}
+	curr.x = game->player_pos.x / 20;
+	curr.y = game->player_pos.y / 20;
+	next.x = rc->draw.next.x / 20;
+	next.y = rc->draw.next.y / 20;
+	bresenham(game->img, curr, next, 0x0000FF00);
 }
 
 void	draw_cube(t_game *game, t_moh2f pos, int size, int color)
@@ -55,7 +48,11 @@ void	draw_cube(t_game *game, t_moh2f pos, int size, int color)
 
 void	draw_player(t_game *game)
 {
-	draw_cube(game, game->player_pos, 2, 0x00FFFF00);
+	t_moh2f pos;
+
+	pos.x = game->player_pos.x / 20;
+	pos.y = game->player_pos.y / 20;
+	draw_cube(game, pos, 2, 0x00FFFF00);
 }
 
 void	draw_wall(t_game *game)
@@ -74,12 +71,12 @@ void	draw_wall(t_game *game)
 			if (game->tab[y][x] == '1')
 				color = 0x00FFFFFF;
 			else if (game->tab[y][x] == 'X')
-				color = 0x00808080;
+				color = game->color_ceil;
 			else
 				color = 0x00000000;
-			o.x = x * SIZE;
-			o.y = y * SIZE;
-			draw_cube(game, o, SIZE, color);
+			o.x = x * (SIZE / 20);
+			o.y = y * (SIZE / 20);
+			draw_cube(game, o, SIZE / 20, color);
 			x++;
 		}
 		x = 0;
@@ -90,8 +87,11 @@ void	draw_wall(t_game *game)
 void	draw_pov(t_game *game)
 {
 	t_moh2f	next;
+	t_moh2f	curr;
 
-	next.x = game->player_pos.x - game->pd.x;
-	next.y = game->player_pos.y - game->pd.y;
-	bresenham(game->img, game->player_pos, next, 0X00FFFF00);
+	next.x = game->player_pos.x / 20 - game->pd.x;
+	next.y = game->player_pos.y / 20 - game->pd.y;
+	curr.x = game->player_pos.x / 20;
+	curr.y = game->player_pos.y / 20;
+	bresenham(game->img, curr, next, 0X00FFFF00);
 }

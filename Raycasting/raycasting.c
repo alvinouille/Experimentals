@@ -6,7 +6,7 @@
 /*   By: alvina <alvina@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 17:45:54 by ale-sain          #+#    #+#             */
-/*   Updated: 2023/05/11 15:48:41 by alvina           ###   ########.fr       */
+/*   Updated: 2023/05/12 18:27:48 by alvina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ void	raycasting(t_game *game)
 		dda_vert(game, &rc);
 		shorter_ray(&rc);
 		draw_3d(game, &rc);
-		// bresenham(game->img, game->player_pos, rc.draw.next, 0x000000FF);
+		draw_ray_minimap(game, &rc);
 		rc.ray++;
 		rc.dda.rot_angle += DR16;
 	}

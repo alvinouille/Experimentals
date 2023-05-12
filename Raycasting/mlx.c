@@ -6,7 +6,7 @@
 /*   By: alvina <alvina@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 13:55:39 by ale-sain          #+#    #+#             */
-/*   Updated: 2023/05/11 17:43:35 by alvina           ###   ########.fr       */
+/*   Updated: 2023/05/12 18:35:48 by alvina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,9 @@ int	display_(t_game *game)
 {
 	grey_screen(game);
 	raycasting(game);
-	// draw_wall(game);
-	// draw_player(game);
-	// draw_pov(game);
+	draw_wall(game);
+	draw_player(game);
+	draw_pov(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
 	return (0);
 }
@@ -113,5 +113,6 @@ int	main(int ac, char **av)
 		game.path_text = av[2];
 	init_player(&game, 0, 0);
 	init_map(&game);
+	init_color(&game);
 	mlx(game);
 }
