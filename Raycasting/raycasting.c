@@ -6,7 +6,7 @@
 /*   By: alvina <alvina@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 17:45:54 by ale-sain          #+#    #+#             */
-/*   Updated: 2023/05/12 18:27:48 by alvina           ###   ########.fr       */
+/*   Updated: 2023/05/13 18:32:56 by alvina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,6 @@
 /*looking down then up then horizontally*/
 void	spawn_horiz(t_game *game, t_raycast *rc)
 {
-	rc->rayH.point.x = game->player_pos.x;
-	rc->rayH.point.y = game->player_pos.y;
-	rc->dda.aTan = (float)-1 / tan(rc->dda.rot_angle);
 	if (rc->dda.rot_angle < PI)
 	{
 		rc->dda.ray.y = (((int)game->player_pos.y / SIZE) * SIZE) - 0.0001;
@@ -73,9 +70,6 @@ void	dda_horiz(t_game *game, t_raycast *rc)
 /*looking right, then looking left*/
 void	spawn_vert(t_game *game, t_raycast *rc)
 {
-	rc->rayV.point.x = game->player_pos.x;
-	rc->rayV.point.y = game->player_pos.y;
-	rc->dda.nTan = -tan(rc->dda.rot_angle);
 	if (rc->dda.rot_angle < P2 || rc->dda.rot_angle > P3)
 	{
 		rc->dda.ray.x = (((int)game->player_pos.x / SIZE) * SIZE) - 0.0001;
@@ -135,12 +129,10 @@ void	raycasting(t_game *game)
 			rc.dda.rot_angle += 2 * PI;
 		else if (rc.dda.rot_angle > 2 * PI)
 			rc.dda.rot_angle -= 2 * PI;
-		rc.dof = 0;
-		rc.rayH.dis = 1000000;
+		ray_init(game, &rc, HORIZONTAL);
 		spawn_horiz(game, &rc);
 		dda_horiz(game, &rc);
-		rc.dof = 0;
-		rc.rayV.dis = 1000000;
+		ray_init(game, &rc, VERTICAL);
 		spawn_vert(game, &rc);
 		dda_vert(game, &rc);
 		shorter_ray(&rc);

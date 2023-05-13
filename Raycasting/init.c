@@ -6,29 +6,21 @@
 /*   By: alvina <alvina@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 17:22:32 by ale-sain          #+#    #+#             */
-/*   Updated: 2023/05/12 18:51:40 by alvina           ###   ########.fr       */
+/*   Updated: 2023/05/13 13:19:22 by alvina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "new.h"
 
-void	grey_screen(t_game *game)
+void	init(t_game *game)
 {
-	int	x;
-	int	y;
-
-	x = 0;
-	y = 0;
-	while (y < W_HEIGHT)
-	{
-		while (x < W_WIDTH)
-		{
-			img_pixel_put((&game->img), x, y, 0x00808080);
-			x++;
-		}
-		x = 0;
-		y++;
-	}
+	game->texture[0].img.img = NULL;
+	game->texture[1].img.img = NULL;
+	game->texture[2].img.img = NULL;
+	game->texture[3].img.img = NULL;
+	game->win = NULL;
+	game->img.img = NULL;
+	game->mlx = NULL;
 }
 
 void	init_player_orientation(t_game *game, int i, int j)
@@ -90,11 +82,11 @@ void	init_map(t_game *game)
 	game->map.size = game->map.length * game->map.height;
 	printf("height : %d, length : %d, size : %d\n", game->map.height,
 		game->map.length, game->map.size);
-	if (game->map.height * (SIZE / 20) >= W_HEIGHT
-		|| game->map.length * (SIZE / 20) >= W_WIDTH)
+	if (game->map.height * (SIZE / 20) >= W_HEIGHT || game->map.length * (SIZE
+			/ 20) >= W_WIDTH)
 	{
 		printf("MAP TROP GRANDE!");
-		exit(0);
+		cleaner(game, 0);
 	}
 }
 

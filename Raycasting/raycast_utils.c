@@ -6,61 +6,70 @@
 /*   By: alvina <alvina@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 17:17:22 by ale-sain          #+#    #+#             */
-/*   Updated: 2023/05/12 17:38:29 by alvina           ###   ########.fr       */
+/*   Updated: 2023/05/13 18:30:00 by alvina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "new.h"
 
-float	shorter_dist(float ax, float ay, float bx, float by)
+void	ray_init(t_game *game, t_raycast *rc, int ray)
 {
-	return (sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)));
+	rc->dof = 0;
+	if (ray == VERTICAL)
+	{
+		rc->rayV.dis = 1000000;
+		rc->rayV.point.x = game->player_pos.x;
+		rc->rayV.point.y = game->player_pos.y;
+		rc->dda.nTan = -tan(rc->dda.rot_angle);
+	}
+	else
+	{
+		rc->rayH.dis = 1000000;
+		rc->rayH.point.x = game->player_pos.x;
+		rc->rayH.point.y = game->player_pos.y;
+		rc->dda.aTan = (float)-1 / tan(rc->dda.rot_angle);
+	}
 }
 
-void	simply_line(t_game *game, t_moh2i start, t_moh2i end, int color)
+int	deter_tox(t_game *game, t_raycast *rc)
 {
-	int	y;
-
-	y = start.y;
-	while (y <= end.y)
+	if (rc->draw.orient == VERTICAL)
 	{
-		img_pixel_put((&game->img), start.x, y, color);
-		y++;
+		if (rc->draw.v_facing == RIGHTT)
+			game->curr_txt = game->texture[0].tab;
+		else
+			game->curr_txt = game->texture[1].tab;
+		return ((int)rc->dda.ray.y % SIZE);
+	}
+	else
+	{
+		if (rc->draw.h_facing == UP)
+			game->curr_txt = game->texture[2].tab;
+		else
+			game->curr_txt = game->texture[3].tab;
+		return ((int)rc->dda.ray.x % SIZE);
 	}
 }
 
 void	build_wall(t_game *game, t_moh2i start, t_moh2i end, t_raycast *rc)
 {
 	int	y;
-	int toY, toX;
-	int dft;
+	int	dft;
+	int	toy;
+	int	tox;
 
-	if (rc->draw.orient == VERTICAL)
-	{
-		toX = (int)rc->dda.ray.y % SIZE;
-		if (rc->draw.v_facing == RIGHTT)
-			game->curr_txt = game->texture[0].tab;
-		else
-			game->curr_txt = game->texture[1].tab;
-	}
-	else
-	{
-		toX = (int)rc->dda.ray.x % SIZE;
-		if (rc->draw.h_facing == UP)
-			game->curr_txt = game->texture[2].tab;
-		else
-			game->curr_txt = game->texture[3].tab;
-	}
+	tox = deter_tox(game, rc);
 	y = start.y;
 	while (y < end.y)
 	{
-		dft = y + (((int)round((SIZE * W_HEIGHT) / rc->disT)) / 2) - round(W_HEIGHT / 2);
-		toY = dft * (SIZE / ((float)round((SIZE * W_HEIGHT) / rc->disT)));
-		if (toY > SIZE - 1)
-			toY = SIZE - 1;
-		if (toY < 0)
-			toY = 0;
-		rc->draw.color = game->curr_txt[toY * SIZE + toX];
+		dft = y + (((int)round((SIZE * W_HEIGHT) / rc->disT)) / 2)
+			- round(W_HEIGHT / 2);
+		toy = dft * (SIZE / ((float)round((SIZE * W_HEIGHT) / rc->disT)));
+		if (toy > SIZE - 1)
+			toy = SIZE - 1;
+		if (toy < 0)
+			toy = 0;
+		rc->draw.color = game->curr_txt[toy * SIZE + tox];
 		img_pixel_put((&game->img), start.x, y, rc->draw.color);
 		y++;
 	}

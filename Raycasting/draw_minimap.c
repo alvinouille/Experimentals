@@ -6,7 +6,7 @@
 /*   By: alvina <alvina@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 17:24:04 by ale-sain          #+#    #+#             */
-/*   Updated: 2023/05/12 18:25:20 by alvina           ###   ########.fr       */
+/*   Updated: 2023/05/13 13:18:40 by alvina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	draw_cube(t_game *game, t_moh2f pos, int size, int color)
 
 void	draw_player(t_game *game)
 {
-	t_moh2f pos;
+	t_moh2f	pos;
 
 	pos.x = game->player_pos.x / 20;
 	pos.y = game->player_pos.y / 20;

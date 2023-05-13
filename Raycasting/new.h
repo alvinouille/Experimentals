@@ -65,18 +65,17 @@ typedef struct s_map
 
 typedef struct s_forthenorme
 {
-	t_moh2f curr;
-	t_moh2f next;
+	t_moh2f	curr;
+	t_moh2f	next;
 }			t_forthenorme;
 
 typedef struct s_txt
 {
-	t_data 	img;
-	int 	*tab;
+	t_data	img;
+	int		*tab;
 	int		height;
 	int		width;
 }			t_txt;
-
 
 typedef struct s_game
 {
@@ -92,7 +91,7 @@ typedef struct s_game
 	int		color_ceil;
 	char	*path_text;
 	int		*curr_txt;
-	t_txt 	texture[4];
+	t_txt	texture[4];
 }			t_game;
 
 typedef struct s_dda
@@ -149,6 +148,7 @@ void		init_player_orientation(t_game *game, int i, int j);
 void		init_player(t_game *game, int i, int j);
 void		init_map(t_game *game);
 void		init_color(t_game *game);
+void		init(t_game *game);
 
 /*	DRAW MINIMAP	*/
 void		grey_screen(t_game *game);
@@ -166,19 +166,24 @@ void		dda_horiz(t_game *game, t_raycast *rc);
 void		spawn_horiz(t_game *game, t_raycast *rc);
 
 /*	RAYCAST_UTILS	*/
-float		shorter_dist(float ax, float ay, float bx, float by);
-void		simply_line(t_game *game, t_moh2i start, t_moh2i end, int color);
 void		draw_3d(t_game *game, t_raycast *rc);
 void		shorter_ray(t_raycast *rc);
+void		ray_init(t_game *game, t_raycast *rc, int ray);
+int			deter_tox(t_game *game, t_raycast *rc);
+void		build_wall(t_game *game, t_moh2i start, t_moh2i end, t_raycast *rc);
 
 /*	BRESENHAM	*/
 void		bresenham(t_data img, t_moh2f curr, t_moh2f next, int color);
 
 /*	UTILS	*/
-void		cleaner(t_game *game);
 void		img_pixel_put(t_data *img, int x, int y, int color);
 int			is_wall(t_game *game, t_moh2f pos);
 int			around(float nb);
+float		shorter_dist(float ax, float ay, float bx, float by);
+void		simply_line(t_game *game, t_moh2i start, t_moh2i end, int color);
+
+/*	TRASH	*/
+void		cleaner(t_game *game, int code);
 
 /*	BRESENHAM	*/
 void		third(t_data img, t_moh2f curr, t_moh2f next, int color);
@@ -192,8 +197,8 @@ void		fifth(t_data img, t_moh2f curr, t_moh2f next, int color);
 void		sixth(t_data img, t_moh2f curr, t_moh2f next, int color);
 
 /*	TEXTURE */
-void    	init_texture(t_game *game);
-int 		convert_hexa_color(int red, int green, int blue);
+void		init_texture(t_game *game);
+int			convert_hexa_color(int red, int green, int blue);
 
 /*	OPTION	*/
 char		*gnl(int fd);

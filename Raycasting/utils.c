@@ -6,36 +6,27 @@
 /*   By: alvina <alvina@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 17:25:56 by ale-sain          #+#    #+#             */
-/*   Updated: 2023/05/11 16:30:00 by alvina           ###   ########.fr       */
+/*   Updated: 2023/05/13 18:18:10 by alvina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "new.h"
 
-void	cleaner(t_game *game)
+float	shorter_dist(float ax, float ay, float bx, float by)
 {
-	int	i;
+	return (sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)));
+}
 
-	i = 0;
-	if (game->tab)
+void	simply_line(t_game *game, t_moh2i start, t_moh2i end, int color)
+{
+	int	y;
+
+	y = start.y;
+	while (y <= end.y)
 	{
-		while (game->tab[i])
-			free(game->tab[i++]);
-		free(game->tab);
+		img_pixel_put((&game->img), start.x, y, color);
+		y++;
 	}
-	if (game->win && game->mlx)
-	{
-		mlx_clear_window(game->mlx, game->win);
-		mlx_destroy_window(game->mlx, game->win);
-	}
-	if (game->img.img)
-		mlx_destroy_image(game->mlx, game->img.img);
-	if (game->mlx)
-	{
-		mlx_destroy_display(game->mlx);
-		free(game->mlx);
-	}
-	exit(0);
 }
 
 void	img_pixel_put(t_data *img, int x, int y, int color)
